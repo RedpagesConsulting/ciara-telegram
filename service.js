@@ -102,15 +102,38 @@ module.exports = (app) => {
 
   // Send message to bot.
   bot.on("message", msg => {
+
     // set chatId variable for use in sendMessage()
     logger.info(msg);
-    chatId = msg.chat.id;
+    chatId = msg.from.id;
+
     
-    const message = {
-      userId: "eddy",
-      messagePayload: MessageModel.textConversationMessage(msg.text)
-    };
-    
+     
+    let message = new Object();  
+
+    if (msg.text == "11. Show More") {
+      //Postback
+
+      let postbackObject = new Object();
+      postbackObject = { state: "GetAgents", action: "system.showMore", variables: {
+        "system.state.GetAgents.customsCommandRangeStart": 10
+      } };
+      logger.info(postbackObject);
+
+      message = {
+        userId: chatId.toString(),
+        messagePayload: MessageModel.postbackConversationMessage(
+          postbackObject, msg.text
+        )
+      };
+    } else {
+      //Text
+      message = {
+        userId: chatId.toString(),
+        messagePayload: MessageModel.textConversationMessage(msg.text)
+      };
+    }
+        
     // send to bot webhook channel
     console.log(message);
     webhook.send(message);
