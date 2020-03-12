@@ -11,7 +11,7 @@ module.exports = (app) => {
 
   // Telegram bot - webhook config
   const telegramToken = process.env.TELEGRAM_API_KEY;
-  const telegramURL = 'YOUR_TELEGRAM_WEBHOOK_URL';
+  const telegramURL = "https://ciara-on-telegram.herokuapp.com/bot/telegram";
   const bot = new TelegramBot(telegramToken);
   //bot.setWebHook( telegramURL );
   // variable to store chatId
