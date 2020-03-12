@@ -20,6 +20,7 @@
   "dependencies": {
     "@oracle/bots-node-sdk": "^2.2.2",
     "express": "^4.17.1",
+    "node-localstorage": "^2.1.5",
     "node-telegram-bot-api": "^0.40.0"
   }
 }
