@@ -11,7 +11,7 @@ module.exports = (app) => {
 
   // Telegram bot - webhook config
   const telegramToken = process.env.TELEGRAM_API_KEY;
-  const telegramURL = "https://ciara-on-telegram.herokuapp.com/bot/telegram";
+  const telegramURL = 'https://ciara-telegram-web.herokuapp.com/bot/message';
   const bot = new TelegramBot(telegramToken);
   //bot.setWebHook( telegramURL );
   // variable to store chatId
@@ -54,6 +54,19 @@ module.exports = (app) => {
 
         if(i == 9){
           keyboard3.push({ text: message.messagePayload.globalActions[0].label });
+
+          let startRange = message.messagePayload.globalActions[0].postback.variables["system.state.GetAgents.customsCommandRangeStart"];
+
+          if (typeof localStorage === "undefined" || localStorage === null) {
+            var LocalStorage = require('node-localstorage').LocalStorage;
+            localStorage = new LocalStorage('./scratch');
+          }
+
+          if (localStorage.getItem("rangeStart") === null) {
+            localStorage.setItem("rangeStart", startRange);
+          } else {
+            localStorage.setItem("rangeStart", startRange);
+          }
         }
         
       }
@@ -109,37 +122,11 @@ module.exports = (app) => {
     chatId = msg.from.id;
      
     let message = new Object(); 
-    //localStorage to store the current value of the 'Show More' button
-    //window.sessionStorage;
-    // if (localStorage.getItem("rangeStart") === null) {
-    //   localStorage.setItem("rangeStart", "10");
-    // } else {
-    //   if (Number(localStorage("rangeStart") == 40)) {
-    //     localStorage.setItem("rangeStart", "10");
-    //   }
-    // }
     let lRangeStart;
    
 
     if (msg.text == "11. Show More") {
-      //use local storage to store the current value of "Show More" button.
-      if (typeof localStorage === "undefined" || localStorage === null) {
-        var LocalStorage = require('node-localstorage').LocalStorage;
-        localStorage = new LocalStorage('./scratch');
-      }
-       
-      
-      if (localStorage.getItem("rangeStart") === null) {
-        localStorage.setItem("rangeStart", "10");
-      } else {
-        lRangeStart = Number(localStorage.getItem("rangeStart"));
-        if (lRangeStart == 40) {
-          localStorage.setItem("rangeStart", "10");
-        }
-      }
-      
-      console.log(localStorage.getItem('rangeStart'));
-
+     
       lRangeStart = Number(localStorage.getItem("rangeStart"));
       let postbackObject = new Object();
       postbackObject = { state: "GetAgents", action: "system.showMore", variables: {
